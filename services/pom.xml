@@ -14,13 +14,14 @@
     <modules>
         <module>services-impl</module>
         <module>services-core</module>
+        <module>services-integrationtest</module>
     </modules>
 
     <dependencies>
         <dependency>
-            <groupId>com.karen</groupId>
-            <artifactId>repository</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

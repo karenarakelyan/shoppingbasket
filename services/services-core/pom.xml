@@ -11,4 +11,12 @@
 
     <artifactId>services-core</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.karen</groupId>
+            <artifactId>domain</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>

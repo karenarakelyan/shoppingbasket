@@ -3,13 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <modules>
-        <module>services</module>
-        <module>api</module>
-        <module>domain</module>
-        <module>web</module>
-        <module>repository</module>
-    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -23,28 +16,16 @@
     <name>shoppingbasket</name>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>services</module>
+        <module>api</module>
+        <module>domain</module>
+        <module>web</module>
+        <module>repository</module>
+    </modules>
+
     <properties>
         <java.version>1.8</java.version>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
 
 </project>
