@@ -6,6 +6,6 @@ package com.karen.shoppingbasket.entity.stock;
 
 public enum MutationType {
 
-    IN, OUT
+    IN, OUT, RESET
 
 }

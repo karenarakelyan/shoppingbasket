@@ -3,37 +3,31 @@ package com.karen.shoppingbasket.entity.order;
 import com.karen.shoppingbasket.entity.ActionTracesAwareBaseEntity;
 import com.karen.shoppingbasket.entity.product.Product;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author Karen Arakelyan
  */
 @Entity
-@Table(name = "order_product")
+@Table(name = "order_product", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_order_product", columnNames = {"orderid", "productid"})
+})
 public class OrderProduct extends ActionTracesAwareBaseEntity {
 
     private OrderProduct() {
     }
 
-    public OrderProduct(final Product product) {
+    public OrderProduct(final Product product, final Integer quantity) {
         this.product = product;
+        this.quantity = quantity;
     }
 
-    @ManyToOne
-    private Order order;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productid", foreignKey = @ForeignKey(name = "FK_order_product_product"))
     private Product product;
 
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(final Order order) {
-        this.order = order;
-    }
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
 
     public Product getProduct() {
         return product;
@@ -42,4 +36,9 @@ public class OrderProduct extends ActionTracesAwareBaseEntity {
     public void setProduct(final Product product) {
         this.product = product;
     }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
 }

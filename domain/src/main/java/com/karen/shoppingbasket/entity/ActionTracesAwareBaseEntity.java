@@ -3,12 +3,13 @@ package com.karen.shoppingbasket.entity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 /**
  * @author Karen Arakelyan
  */
-
+@MappedSuperclass
 public class ActionTracesAwareBaseEntity extends BaseEntity {
 
     @Column(name = "createdon", nullable = false, updatable = false)

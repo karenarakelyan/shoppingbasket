@@ -40,7 +40,7 @@ public class StockMutationServiceImplTest {
     @Test
     public void testThatStockMutationBeingCreatedSuccessfully() {
         final Long productId = 123L;
-        final Product product = new Product();
+        final Product product = new Product("name", null, null, null);
         product.setId(productId);
         when(productService.findOne(productId)).thenReturn(product);
         when(stockMutationRepository.save(isA(StockMutation.class))).thenAnswer((Answer<StockMutation>) invocationOnMock -> {
@@ -90,21 +90,34 @@ public class StockMutationServiceImplTest {
     @Test
     public void shouldCalculateTotalStockOfGivenProduct() {
         final Long productId = 123L;
-        final Product product = new Product();
+        final Product product = new Product("name", null, null, null);
+        final StockMutation lastResetMutation = new StockMutation();
+        lastResetMutation.setId(111L);
         product.setId(productId);
         when(productService.findOne(productId)).thenReturn(product);
-        when(stockMutationRepository.calculateSumByProductId(productId)).thenReturn(111L);
-        final Long stock = stockMutationService.calculateStock(productId);
+        when(stockMutationRepository.getLastResetMutationForProduct(productId)).thenReturn(lastResetMutation);
+        when(stockMutationRepository.calculateSumByProductId(productId, lastResetMutation.getId())).thenReturn(111);
+        final int stock = stockMutationService.calculateStock(productId);
         verify(productService).findOne(productId);
-        verify(stockMutationRepository).calculateSumByProductId(productId);
+        verify(stockMutationRepository).getLastResetMutationForProduct(productId);
+        verify(stockMutationRepository).calculateSumByProductId(productId, lastResetMutation.getId());
         verifyNoMoreInteractions(productService, stockMutationRepository);
-        assertEquals(Long.valueOf(111L), stock);
+        assertEquals(111L, stock);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowAnExceptionWhenWrongProductProvidedDuringStockMutationCalculation() {
         when(productService.findOne(123L)).thenReturn(null);
         stockMutationService.calculateStock(123L);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowAnExceptionWhenNoResetMutationDuringStockMutationCalculation() {
+        final long productId = 123L;
+        final Product product = new Product("name", null, null, null);
+        when(productService.findOne(productId)).thenReturn(product);
+        when(stockMutationRepository.getLastResetMutationForProduct(productId)).thenReturn(null);
+        stockMutationService.calculateStock(productId);
     }
 
 }

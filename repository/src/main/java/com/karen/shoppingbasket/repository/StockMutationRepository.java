@@ -12,7 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StockMutationRepository extends JpaRepository<StockMutation, Long> {
 
-    @Query("SELECT SUM(sm.mutationCount) FROM StockMutation sm where sm.product.id = ?1")
-    Long calculateSumByProductId(final Long productId);
+    @Query("SELECT SUM(sm.mutationCount) FROM StockMutation sm where sm.product.id = ?1 AND sm.id >= ?2")
+    Integer calculateSumByProductId(Long productId, Long id);
+
+    @Query("SELECT sm FROM StockMutation sm where sm.product.id = ?1 AND sm.mutationType = 'RESET' ORDER BY id DESC")
+    StockMutation getLastResetMutationForProduct(Long productId);
 
 }

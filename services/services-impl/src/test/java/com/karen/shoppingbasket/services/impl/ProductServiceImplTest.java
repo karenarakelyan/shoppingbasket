@@ -1,6 +1,6 @@
 package com.karen.shoppingbasket.services.impl;
 
-import com.karen.shoppingbasket.dto.ProductDto;
+import com.karen.shoppingbasket.dto.product.ProductDto;
 import com.karen.shoppingbasket.entity.product.Product;
 import com.karen.shoppingbasket.repository.ProductRepository;
 import org.junit.Test;
@@ -68,7 +68,10 @@ public class ProductServiceImplTest {
         //Assert
         assertEquals(id, result);
         final Product capturedProduct = productArgumentCaptor.getValue();
-        assertEquals(product, capturedProduct);
+        assertEquals(product.getName(), capturedProduct.getName());
+        assertEquals(product.getDescription(), capturedProduct.getDescription());
+        assertEquals(product.getType(), capturedProduct.getType());
+        assertEquals(product.getPrice(), capturedProduct.getPrice());
         assertNotNull(capturedProduct.getCreatedOn());
     }
 
@@ -173,10 +176,16 @@ public class ProductServiceImplTest {
     @Test
     public void shouldDeleteProduct() {
         final Long id = 123L;
+        final Product product = createProduct(id, "Product1", "Cool Product", BigDecimal.TEN, "Food");
+        when(productRepository.getOne(id)).thenReturn(product);
         productService.delete(id);
         //Verify
-        verify(productRepository).deleteById(id);
+        verify(productRepository).getOne(id);
+        verify(productRepository).save(productArgumentCaptor.capture());
         verifyNoMoreInteractions(productRepository);
+        //Assert
+        final Product deletedProduct = productArgumentCaptor.getValue();
+        assertNotNull(deletedProduct.getDeletedOn());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -184,13 +193,16 @@ public class ProductServiceImplTest {
         productService.delete(null);
     }
 
+    @Test(expected = EntityNotFoundException.class)
+    public void shouldThrowAnExceptionWhenProductWithProvidedIdIsNotFound() {
+        final Long id = 123L;
+        when(productRepository.getOne(id)).thenThrow(new EntityNotFoundException());
+        productService.delete(id);
+    }
+
     private Product createProduct(final Long id, final String name, final String description, final BigDecimal price, final String type) {
-        final Product product = new Product();
+        final Product product = new Product(name, description, type, price);
         product.setId(id);
-        product.setName(name);
-        product.setDescription(description);
-        product.setType(type);
-        product.setPrice(price);
         return product;
     }
 

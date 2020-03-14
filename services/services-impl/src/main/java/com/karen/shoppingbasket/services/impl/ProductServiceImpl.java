@@ -1,6 +1,6 @@
 package com.karen.shoppingbasket.services.impl;
 
-import com.karen.shoppingbasket.dto.ProductDto;
+import com.karen.shoppingbasket.dto.product.ProductDto;
 import com.karen.shoppingbasket.entity.product.Product;
 import com.karen.shoppingbasket.repository.ProductRepository;
 import com.karen.shoppingbasket.services.ProductService;
@@ -33,9 +33,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Long create(final ProductDto productDto) {
         assertDto(productDto);
-        final Product product = new Product();
-        setProductProperties(productDto, product);
-        product.setCreatedOn(LocalDateTime.now());
+        final Product product = new Product(productDto.getName(), productDto.getDescription(), productDto.getType(), productDto.getPrice());
         final Product savedProduct = productRepository.save(product);
         return savedProduct.getId();
     }
@@ -54,7 +52,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(final Long id) {
         Assert.notNull(id, "Id must not be null");
-        productRepository.deleteById(id);
+        final Product product = productRepository.getOne(id);
+        product.setDeletedOn(LocalDateTime.now());
+        productRepository.save(product);
     }
 
     private void setProductProperties(final ProductDto productDto, final Product product) {

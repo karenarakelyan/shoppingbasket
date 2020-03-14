@@ -1,5 +1,6 @@
 package com.karen.shoppingbasket.services.impl;
 
+import com.karen.shoppingbasket.dto.order.OrderDto;
 import com.karen.shoppingbasket.entity.order.Order;
 import com.karen.shoppingbasket.entity.order.OrderProduct;
 import com.karen.shoppingbasket.entity.order.Status;
@@ -9,13 +10,12 @@ import com.karen.shoppingbasket.services.OrderService;
 import com.karen.shoppingbasket.services.ProductService;
 import com.karen.shoppingbasket.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,14 +42,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long createOrder(final List<Long> productIds, final Long userId) {
-        Assert.notEmpty(productIds, "Product ids must not be null");
+    public Long createOrder(final OrderDto orderDto, final Long userId) {
+        Assert.notNull(orderDto, "Order Dto must not be null");
+        Assert.notEmpty(orderDto.getProductsWithQuantities(), "Product ids must not be null");
         Assert.notNull(userId, "User id must not be null");
-        final Set<OrderProduct> orderProducts = productIds
-                .stream()
-                .map(productService::findOne)
-                .map(OrderProduct::new)
-                .collect(Collectors.toSet());
+        final Set<OrderProduct> orderProducts = createOrderProducts(orderDto.getProductsWithQuantities());
         final User user = userService.findById(userId);
         final Order order = new Order(Status.ORDERED, orderProducts, user);
         final Order savedOrder = orderRepository.save(order);
@@ -75,4 +72,21 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getCustomerOrders(final Long customerId) {
         return orderRepository.getByUserId(customerId);
     }
+
+
+    @Override
+    public Order getSingleOrder(Long orderId) {
+        Assert.notNull(orderId, "Order id must not be null");
+        return orderRepository.getOne(orderId);
+    }
+
+    private Set<OrderProduct> createOrderProducts(final Map<Long, Integer> productWithQuantities) {
+        return productWithQuantities
+                .entrySet()
+                .stream()
+                .map(e -> new OrderProduct(productService.findOne(e.getKey()), e.getValue()))
+                .collect(Collectors.toSet());
+    }
+
+
 }

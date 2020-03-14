@@ -37,12 +37,6 @@
             <version>3.9</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.karen</groupId>
-            <artifactId>web</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
 </project>

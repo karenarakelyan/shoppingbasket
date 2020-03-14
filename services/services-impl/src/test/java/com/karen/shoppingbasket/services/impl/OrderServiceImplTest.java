@@ -1,5 +1,6 @@
 package com.karen.shoppingbasket.services.impl;
 
+import com.karen.shoppingbasket.dto.order.OrderDto;
 import com.karen.shoppingbasket.entity.order.Order;
 import com.karen.shoppingbasket.entity.order.Status;
 import com.karen.shoppingbasket.entity.product.Product;
@@ -50,12 +51,12 @@ public class OrderServiceImplTest {
 
     @Test
     public void testThatOrderIsBeingCreatedSuccessully() {
-        final List<Long> productIds = Arrays.asList(11L, 22L, 33L);
+        final OrderDto orderDto = createOrderDto();
         final Long userId = 123L;
         final User user = new User();
         user.setId(userId);
         when(productService.findOne(isA(Long.class))).thenAnswer((Answer<Product>) invocationOnMock -> {
-            final Product product = new Product();
+            final Product product = new Product("name", null, null, null);
             product.setId(invocationOnMock.getArgument(0));
             return product;
         });
@@ -65,7 +66,7 @@ public class OrderServiceImplTest {
             order.setId(123L);
             return order;
         });
-        final Long reusult = orderService.createOrder(productIds, userId);
+        final Long reusult = orderService.createOrder(orderDto, userId);
         verify(productService).findOne(11L);
         verify(productService).findOne(22L);
         verify(productService).findOne(33L);
@@ -79,12 +80,13 @@ public class OrderServiceImplTest {
         assertEquals(user, capturedOrder.getUser());
     }
 
+
     @Test(expected = EntityNotFoundException.class)
     public void testThatOrderCreationFailsBecauseOfWrongProductIdIsSpecified() {
-        final List<Long> productIds = Arrays.asList(11L, 22L, 33L);
+        final OrderDto orderDto = createOrderDto();
         final Long userId = 123L;
         when(productService.findOne(isA(Long.class))).thenThrow(new EntityNotFoundException());
-        orderService.createOrder(productIds, userId);
+        orderService.createOrder(orderDto, userId);
     }
 
     @Test
@@ -97,15 +99,15 @@ public class OrderServiceImplTest {
             //Exception
         }
         try {
-            final List<Long> productIds = Arrays.asList(11L, 22L, 33L);
-            orderService.createOrder(productIds, null);
+            final OrderDto orderDto = createOrderDto();
+            orderService.createOrder(orderDto, null);
             fail();
         } catch (final IllegalArgumentException exp) {
             //Exception
         }
         try {
-            final List<Long> productIds = Collections.EMPTY_LIST;
-            orderService.createOrder(productIds, null);
+            final OrderDto orderDto = createOrderDto();
+            orderService.createOrder(orderDto, null);
             fail();
         } catch (final IllegalArgumentException exp) {
             //Exception
@@ -167,6 +169,37 @@ public class OrderServiceImplTest {
         verifyNoInteractions(productService);
     }
 
+    @Test
+    public void shouldReturnSingleOrder() {
+        final Long orderId = 123L;
+        final Order order = new Order(Status.ORDERED, Collections.EMPTY_SET, new User());
+        order.setId(orderId);
+        when(orderRepository.getOne(orderId)).thenReturn(order);
+        final Order fetchedOrder = orderService.getSingleOrder(orderId);
+        verify(orderRepository).getOne(orderId);
+        verifyNoMoreInteractions(orderRepository);
+        assertEquals(order, fetchedOrder);
+    }
+
+
+    @Test(expected = EntityNotFoundException.class)
+    public void shouldThrowExceptionWhenOrderIsNotFound() {
+        final Long orderId = 123L;
+        when(orderRepository.getOne(orderId)).thenThrow(new EntityNotFoundException());
+        orderService.getSingleOrder(orderId);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionWhenOrderIdIsNull() {
+        orderService.getSingleOrder(null);
+    }
+
+    private OrderDto createOrderDto() {
+        final List<Long> productIds = Arrays.asList(11L, 22L, 33L, 22L);
+        final OrderDto orderDto = new OrderDto();
+        productIds.forEach(productId -> orderDto.addProduct(productId, 5L));
+        return orderDto;
+    }
 
     private List<Order> generateOrders() {
         final List<Order> orders = new ArrayList<>();

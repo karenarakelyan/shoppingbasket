@@ -30,10 +30,12 @@ public class Order extends ActionTracesAwareBaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "orderid", nullable = false, foreignKey = @ForeignKey(name = "FK_order_product_order"))
     private Set<OrderProduct> orderProducts;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid", foreignKey = @ForeignKey(name = "FK_order_user"))
     private User user;
 
     public Status getStatus() {

@@ -3,10 +3,7 @@ package com.karen.shoppingbasket.entity.stock;
 import com.karen.shoppingbasket.entity.ActionTracesAwareBaseEntity;
 import com.karen.shoppingbasket.entity.product.Product;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author Karen Arakelyan
@@ -25,12 +22,14 @@ public class StockMutation extends ActionTracesAwareBaseEntity {
     }
 
     @ManyToOne
+    @JoinColumn(name = "productid", foreignKey = @ForeignKey(name = "FK_stock_mutation_product"))
     private Product product;
 
-    @Column(name = "mutation_type", nullable = false)
+    @Column(name = "mutationtype", nullable = false)
+    @Enumerated(EnumType.STRING)
     private MutationType mutationType;
 
-    @Column(name = "mutation_count", nullable = false)
+    @Column(name = "mutationcount", nullable = false)
     private Integer mutationCount;
 
     public Product getProduct() {

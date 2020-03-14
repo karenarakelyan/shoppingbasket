@@ -1,4 +1,4 @@
-package com.karen.shoppingbasket.dto;
+package com.karen.shoppingbasket.restmodels.product;
 
 import java.math.BigDecimal;
 
@@ -6,7 +6,7 @@ import java.math.BigDecimal;
  * @author Karen Arakelyan
  */
 
-public class ProductDto {
+public abstract class ProductModel {
 
     private String name;
 

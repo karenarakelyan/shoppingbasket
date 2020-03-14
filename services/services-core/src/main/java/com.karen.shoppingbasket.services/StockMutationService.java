@@ -10,6 +10,6 @@ public interface StockMutationService {
 
     Long createStockMutation(Long productId, MutationType type, Integer count);
 
-    Long calculateStock(Long productId);
+    int calculateStock(Long productId);
 
 }

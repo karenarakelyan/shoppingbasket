@@ -39,10 +39,12 @@ public class StockMutationServiceImpl implements StockMutationService {
     }
 
     @Override
-    public Long calculateStock(final Long productId) {
+    public int calculateStock(final Long productId) {
         Assert.notNull(productId, "Product id must not be null");
         fetchAndAssertProduct(productId);
-        return stockMutationRepository.calculateSumByProductId(productId);
+        final StockMutation lastResetMutationForProduct = stockMutationRepository.getLastResetMutationForProduct(productId);
+        Assert.notNull(lastResetMutationForProduct, "Stock for this product is corrupted");
+        return stockMutationRepository.calculateSumByProductId(productId, lastResetMutationForProduct.getId());
     }
 
     private Product fetchAndAssertProduct(final Long productId) {
