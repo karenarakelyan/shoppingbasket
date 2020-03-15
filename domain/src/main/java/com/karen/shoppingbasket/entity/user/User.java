@@ -15,7 +15,7 @@ public class User extends BaseEntity {
     private String username;
 
     @Column(name = "password", nullable = false)
-    private String passwword;
+    private String password;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -30,12 +30,12 @@ public class User extends BaseEntity {
         this.username = username;
     }
 
-    public String getPasswword() {
-        return passwword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswword(final String passwword) {
-        this.passwword = passwword;
+    public void setPassword(final String password) {
+        this.password = password;
     }
 
     public Role getRole() {

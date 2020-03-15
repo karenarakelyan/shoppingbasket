@@ -2,9 +2,11 @@ package com.karen.shoppingbasket.services.impl;
 
 import com.karen.shoppingbasket.dto.product.ProductDto;
 import com.karen.shoppingbasket.entity.product.Product;
+import com.karen.shoppingbasket.event.ProductCreatedEvent;
 import com.karen.shoppingbasket.repository.ProductRepository;
 import com.karen.shoppingbasket.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -19,9 +21,12 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     @Autowired
-    public ProductServiceImpl(final ProductRepository productRepository) {
+    public ProductServiceImpl(final ProductRepository productRepository, final ApplicationEventPublisher applicationEventPublisher) {
         this.productRepository = productRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -35,6 +40,7 @@ public class ProductServiceImpl implements ProductService {
         assertDto(productDto);
         final Product product = new Product(productDto.getName(), productDto.getDescription(), productDto.getType(), productDto.getPrice());
         final Product savedProduct = productRepository.save(product);
+        applicationEventPublisher.publishEvent(new ProductCreatedEvent(this, savedProduct.getId(), 10));
         return savedProduct.getId();
     }
 

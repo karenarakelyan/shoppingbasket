@@ -9,5 +9,5 @@ CREATE TABLE `product`
     `updatedon`   DATETIME       NULL,
     `deletedon`   DATETIME       NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `UK_product_name_deletedon` (`name` ASC, `deletedon` ASC)
+    CONSTRAINT UNIQUE INDEX `UK_product_name_deletedon` (`name` ASC, `deletedon` ASC)
 );

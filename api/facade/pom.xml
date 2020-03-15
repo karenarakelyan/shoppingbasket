@@ -14,6 +14,11 @@
     <dependencies>
         <dependency>
             <groupId>com.karen</groupId>
+            <artifactId>rest-models</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.karen</groupId>
             <artifactId>services-core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -25,7 +30,12 @@
         </dependency>
         <dependency>
             <groupId>com.karen</groupId>
-            <artifactId>rest-models</artifactId>
+            <artifactId>application-servies-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.karen</groupId>
+            <artifactId>application-services-impl</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

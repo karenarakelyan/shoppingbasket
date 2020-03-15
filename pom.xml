@@ -22,6 +22,8 @@
         <module>domain</module>
         <module>web</module>
         <module>repository</module>
+        <module>application</module>
+        <module>security</module>
     </modules>
 
     <dependencies>

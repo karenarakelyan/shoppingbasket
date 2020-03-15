@@ -28,9 +28,9 @@
             <version>1.2.32</version>
         </dependency>
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.2.32</version>
+            <groupId>com.karen</groupId>
+            <artifactId>security-facade</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

@@ -4,6 +4,7 @@ import com.karen.shoppingbasket.entity.ActionTracesAwareBaseEntity;
 import com.karen.shoppingbasket.entity.product.Product;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author Karen Arakelyan
@@ -19,6 +20,7 @@ public class StockMutation extends ActionTracesAwareBaseEntity {
         this.product = product;
         this.mutationType = mutationType;
         this.mutationCount = mutationCount;
+        this.setCreatedOn(LocalDateTime.now());
     }
 
     @ManyToOne

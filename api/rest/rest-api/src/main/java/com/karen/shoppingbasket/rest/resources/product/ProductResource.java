@@ -4,13 +4,12 @@ import com.karen.shoppingbasket.facade.product.ProductFacade;
 import com.karen.shoppingbasket.restmodels.product.CreateProductModel;
 import com.karen.shoppingbasket.restmodels.product.ProductInformationResponseModel;
 import com.karen.shoppingbasket.restmodels.product.UpdateProductModel;
+import com.karen.shoppingbasket.security.core.TokenAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.websocket.server.PathParam;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Karen Arakelyan
@@ -26,23 +25,29 @@ public class ProductResource {
         this.productFacade = productFacade;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(name = "Create Product", method = RequestMethod.POST)
     public Long createProduct(@RequestBody final CreateProductModel createProductModel) {
         return productFacade.createProduct(createProductModel);
     }
 
-    @RequestMapping(name = "Create Product", method = RequestMethod.PUT, path = "/{id}/")
-    public ProductInformationResponseModel updateProduct(@PathParam("id") final Long id, final UpdateProductModel updateProductModel) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(name = "Update Product", method = RequestMethod.PUT, path = "/{id}/")
+    public ProductInformationResponseModel updateProduct(@PathVariable("id") final Long id, final UpdateProductModel updateProductModel) {
         return productFacade.updateProduct(id, updateProductModel);
     }
 
-    @RequestMapping(name = "Create Product", method = RequestMethod.GET, path = "/{id}")
-    public ProductInformationResponseModel getById(@PathParam("id") final Long id) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    @RequestMapping(name = "Get Product By Id", method = RequestMethod.GET, path = "/{id}")
+    public ProductInformationResponseModel getById(@PathVariable("id") final Long id) {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Long userId = ((TokenAuthentication) authentication).getUser().getId();
         return productFacade.getById(id);
     }
 
-    @RequestMapping(name = "Create Product", method = RequestMethod.DELETE, path = "/{id}")
-    public void delete(@PathParam("id") final Long id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(name = "Delete Product", method = RequestMethod.DELETE, path = "/{id}")
+    public void delete(@PathVariable("id") final Long id) {
         productFacade.delete(id);
     }
 

@@ -54,6 +54,9 @@ public class StockMutationServiceImpl implements StockMutationService {
     }
 
     private int parseMutation(final MutationType type, final Integer count) {
+        if (MutationType.RESET.equals(type)) {
+            return count;
+        }
         if (MutationType.IN.equals(type)) {
             return Math.abs(count);
         } else {
