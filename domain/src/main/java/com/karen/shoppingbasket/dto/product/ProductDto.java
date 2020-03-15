@@ -16,6 +16,8 @@ public class ProductDto {
 
     private BigDecimal price;
 
+    private Integer stockQuantity;
+
     public String getName() {
         return name;
     }
@@ -46,5 +48,13 @@ public class ProductDto {
 
     public void setPrice(final BigDecimal price) {
         this.price = price;
+    }
+
+    public Integer getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(final Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 }

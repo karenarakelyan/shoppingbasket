@@ -44,5 +44,4 @@ public class OrderMapperFacade {
         return new OrderProductResponseModel(productInformationResponseModel, orderProduct.getQuantity());
     }
 
-
 }

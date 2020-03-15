@@ -8,16 +8,16 @@ import java.util.List;
 
 public class OrderResponseModel {
 
-    private final List<OrderProductResponseModel> orderProductResponseModels;
+    private final List<OrderProductResponseModel> products;
 
     private final OrderStatus orderStatus;
 
-    public OrderResponseModel(final List<OrderProductResponseModel> orderProductResponseModels, final OrderStatus orderStatus) {
-        this.orderProductResponseModels = orderProductResponseModels;
+    public OrderResponseModel(final List<OrderProductResponseModel> products, final OrderStatus orderStatus) {
+        this.products = products;
         this.orderStatus = orderStatus;
     }
 
-    public List<OrderProductResponseModel> getOrderProductResponseModels() {
-        return orderProductResponseModels;
+    public List<OrderProductResponseModel> getProducts() {
+        return products;
     }
 }

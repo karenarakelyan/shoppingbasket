@@ -5,11 +5,15 @@ import com.karen.shoppingbasket.entity.order.Order;
 import com.karen.shoppingbasket.entity.order.OrderProduct;
 import com.karen.shoppingbasket.entity.order.Status;
 import com.karen.shoppingbasket.entity.user.User;
+import com.karen.shoppingbasket.event.OrderCreatedEvent;
+import com.karen.shoppingbasket.exception.InsufficientStockException;
 import com.karen.shoppingbasket.repository.OrderRepository;
 import com.karen.shoppingbasket.services.OrderService;
 import com.karen.shoppingbasket.services.ProductService;
+import com.karen.shoppingbasket.services.StockMutationService;
 import com.karen.shoppingbasket.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -32,13 +36,22 @@ public class OrderServiceImpl implements OrderService {
 
     private final UserService userService;
 
+    private final StockMutationService stockMutationService;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+
     @Autowired
     public OrderServiceImpl(final OrderRepository orderRepository,
                             final ProductService productService,
-                            final UserService userService) {
+                            final UserService userService,
+                            final StockMutationService stockMutationService,
+                            final ApplicationEventPublisher applicationEventPublisher) {
         this.orderRepository = orderRepository;
         this.productService = productService;
         this.userService = userService;
+        this.stockMutationService = stockMutationService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -47,9 +60,14 @@ public class OrderServiceImpl implements OrderService {
         Assert.notEmpty(orderDto.getProductsWithQuantities(), "Product ids must not be null");
         Assert.notNull(userId, "User id must not be null");
         final Set<OrderProduct> orderProducts = createOrderProducts(orderDto.getProductsWithQuantities());
+        checkStockQuantities(orderProducts);
         final User user = userService.findById(userId);
         final Order order = new Order(Status.ORDERED, orderProducts, user);
         final Order savedOrder = orderRepository.save(order);
+        final Map<Long, Integer> productAndQuantitiesMap = savedOrder.getOrderProducts()
+                .stream()
+                .collect(Collectors.toMap(e -> e.getProduct().getId(), OrderProduct::getQuantity));
+        applicationEventPublisher.publishEvent(new OrderCreatedEvent(this, productAndQuantitiesMap));
         return savedOrder.getId();
     }
 
@@ -70,12 +88,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getCustomerOrders(final Long customerId) {
-        return orderRepository.getByUserId(customerId);
+        return orderRepository.findAllByUserId(customerId);
     }
 
 
     @Override
-    public Order getSingleOrder(Long orderId) {
+    public Order getSingleOrder(final Long orderId) {
         Assert.notNull(orderId, "Order id must not be null");
         return orderRepository.getOne(orderId);
     }
@@ -86,6 +104,15 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(e -> new OrderProduct(productService.findOne(e.getKey()), e.getValue()))
                 .collect(Collectors.toSet());
+    }
+
+    private void checkStockQuantities(final Set<OrderProduct> orderProducts) {
+        for (final OrderProduct orderProduct : orderProducts) {
+            final int stock = stockMutationService.calculateStock(orderProduct.getProduct().getId());
+            if (stock < orderProduct.getQuantity()) {
+                throw new InsufficientStockException(orderProduct.getProduct().getId(), orderProduct.getQuantity(), stock);
+            }
+        }
     }
 
 

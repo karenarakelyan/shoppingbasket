@@ -1,6 +1,6 @@
 package com.karen.shoppingbasket.application.services.impl.product;
 
-import com.karen.shoppingbasket.application.services.impl.stockmutation.NewProductStockMutationGenerationServiceImpl;
+import com.karen.shoppingbasket.application.services.impl.stockmutation.ProductStockResetMutationGenerationServiceImpl;
 import com.karen.shoppingbasket.entity.stock.MutationType;
 import com.karen.shoppingbasket.services.StockMutationService;
 import org.junit.Test;
@@ -15,10 +15,10 @@ import org.mockito.junit.MockitoJUnitRunner;
  */
 
 @RunWith(MockitoJUnitRunner.class)
-public class NewProductStockMutationGenerationServiceImplTest {
+public class ProductStockResetMutationGenerationServiceImplTest {
 
     @InjectMocks
-    private NewProductStockMutationGenerationServiceImpl newProductStockMutationGenerationService;
+    private ProductStockResetMutationGenerationServiceImpl newProductStockMutationGenerationService;
 
     @Mock
     private StockMutationService stockMutationService;

@@ -10,6 +10,9 @@ import com.karen.shoppingbasket.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author Karen Arakelyan
  */
@@ -47,10 +50,15 @@ public class ProductFacadeImpl implements ProductFacade {
     }
 
     @Override
+    public List<ProductInformationResponseModel> findAll() {
+        final List<Product> products = productService.findAll();
+        return products.stream().map(productMapperFacade::generateResponseModel).collect(Collectors.toList());
+    }
+
+    @Override
     public void delete(final Long id) {
         productService.delete(id);
     }
-
 
 
 }

@@ -47,4 +47,5 @@ public abstract class ProductModel {
     public void setPrice(final BigDecimal price) {
         this.price = price;
     }
+
 }

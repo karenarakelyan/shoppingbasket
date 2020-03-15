@@ -8,7 +8,7 @@ public class ProductInformationResponseModel extends ProductModel {
 
     private Long id;
 
-    private Integer count;
+    private Integer stockQuantity;;
 
     public Long getId() {
         return id;
@@ -18,11 +18,11 @@ public class ProductInformationResponseModel extends ProductModel {
         this.id = id;
     }
 
-    public Integer getCount() {
-        return count;
+    public Integer getStockQuantity() {
+        return stockQuantity;
     }
 
-    public void setCount(final Integer count) {
-        this.count = count;
+    public void setStockQuantity(final Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 }

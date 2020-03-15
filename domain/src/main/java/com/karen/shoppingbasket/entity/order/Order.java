@@ -12,7 +12,7 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class Order extends ActionTracesAwareBaseEntity {
 
     private Order() {

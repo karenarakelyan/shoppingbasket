@@ -5,8 +5,11 @@ import com.karen.shoppingbasket.entity.order.Order;
 import com.karen.shoppingbasket.entity.order.Status;
 import com.karen.shoppingbasket.entity.product.Product;
 import com.karen.shoppingbasket.entity.user.User;
+import com.karen.shoppingbasket.event.OrderCreatedEvent;
+import com.karen.shoppingbasket.exception.InsufficientStockException;
 import com.karen.shoppingbasket.repository.OrderRepository;
 import com.karen.shoppingbasket.services.ProductService;
+import com.karen.shoppingbasket.services.StockMutationService;
 import com.karen.shoppingbasket.services.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.context.ApplicationEventPublisher;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -46,6 +50,12 @@ public class OrderServiceImplTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private StockMutationService stockMutationService;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Captor
     private ArgumentCaptor<Order> orderArgumentCaptor;
 
@@ -60,6 +70,7 @@ public class OrderServiceImplTest {
             product.setId(invocationOnMock.getArgument(0));
             return product;
         });
+        when(stockMutationService.calculateStock(isA(Long.class))).thenReturn(10);
         when(userService.findById(userId)).thenReturn(user);
         when(orderRepository.save(isA(Order.class))).thenAnswer(invocationOnMock -> {
             final Order order = invocationOnMock.getArgument(0);
@@ -70,14 +81,35 @@ public class OrderServiceImplTest {
         verify(productService).findOne(11L);
         verify(productService).findOne(22L);
         verify(productService).findOne(33L);
+        verify(stockMutationService, times(3)).calculateStock(isA(Long.class));
         verify(userService).findById(userId);
         verify(orderRepository).save(orderArgumentCaptor.capture());
-        verifyNoMoreInteractions(productService, userService, orderRepository);
+        verify(applicationEventPublisher).publishEvent(isA(OrderCreatedEvent.class));
+        verifyNoMoreInteractions(productService, userService, orderRepository, stockMutationService, applicationEventPublisher);
         assertEquals(Long.valueOf(123L), reusult);
         final Order capturedOrder = orderArgumentCaptor.getValue();
         assertEquals(Status.ORDERED, capturedOrder.getStatus());
         assertEquals(3, capturedOrder.getOrderProducts().size());
         assertEquals(user, capturedOrder.getUser());
+    }
+
+    @Test(expected = InsufficientStockException.class)
+    public void testThatExceptionIsThrownOnInsufficientStock() {
+        final OrderDto orderDto = createOrderDto();
+        final Long userId = 123L;
+        final User user = new User();
+        user.setId(userId);
+        when(productService.findOne(isA(Long.class))).thenAnswer((Answer<Product>) invocationOnMock -> {
+            final Product product = new Product("name", null, null, null);
+            product.setId(invocationOnMock.getArgument(0));
+            return product;
+        });
+        when(stockMutationService.calculateStock(isA(Long.class))).thenReturn(4);
+        orderService.createOrder(orderDto, userId);
+        verify(productService).findOne(11L);
+        verify(productService).findOne(22L);
+        verify(productService).findOne(33L);
+        verify(stockMutationService, times(3)).calculateStock(isA(Long.class));
     }
 
 
@@ -161,10 +193,10 @@ public class OrderServiceImplTest {
     @Test
     public void shouldReturnCustomerAllOrders() {
         final Long customerId = 123L;
-        when(orderRepository.getByUserId(customerId)).thenReturn(generateOrders());
+        when(orderRepository.findAllByUserId(customerId)).thenReturn(generateOrders());
         final List<Order> allOrders = orderService.getCustomerOrders(customerId);
         assertEquals(3, allOrders.size());
-        verify(orderRepository).getByUserId(customerId);
+        verify(orderRepository).findAllByUserId(customerId);
         verifyNoMoreInteractions(orderRepository);
         verifyNoInteractions(productService);
     }

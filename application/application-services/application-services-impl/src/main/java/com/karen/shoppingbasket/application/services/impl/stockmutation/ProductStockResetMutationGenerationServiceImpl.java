@@ -1,6 +1,6 @@
 package com.karen.shoppingbasket.application.services.impl.stockmutation;
 
-import com.karen.shoppingbasket.application.services.stockmutation.NewProductStockMutationGenerationService;
+import com.karen.shoppingbasket.application.services.stockmutation.ProductStockResetMutationGenerationService;
 import com.karen.shoppingbasket.entity.stock.MutationType;
 import com.karen.shoppingbasket.services.StockMutationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class NewProductStockMutationGenerationServiceImpl implements NewProductStockMutationGenerationService {
+public class ProductStockResetMutationGenerationServiceImpl implements ProductStockResetMutationGenerationService {
 
     private final StockMutationService stockMutationService;
 
     @Autowired
-    public NewProductStockMutationGenerationServiceImpl(final StockMutationService stockMutationService) {
+    public ProductStockResetMutationGenerationServiceImpl(final StockMutationService stockMutationService) {
         this.stockMutationService = stockMutationService;
     }
 

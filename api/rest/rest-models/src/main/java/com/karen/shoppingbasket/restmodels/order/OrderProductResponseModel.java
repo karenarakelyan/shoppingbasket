@@ -8,20 +8,20 @@ import com.karen.shoppingbasket.restmodels.product.ProductInformationResponseMod
 
 public class OrderProductResponseModel {
 
-    private final ProductInformationResponseModel productInformationResponseModel;
+    private final ProductInformationResponseModel product;
 
-    private final Integer quantity;
+    private final Integer orderedQuantity;
 
-    public OrderProductResponseModel(final ProductInformationResponseModel productInformationResponseModel, final Integer quantity) {
-        this.productInformationResponseModel = productInformationResponseModel;
-        this.quantity = quantity;
+    public OrderProductResponseModel(final ProductInformationResponseModel product, final Integer orderedQuantity) {
+        this.product = product;
+        this.orderedQuantity = orderedQuantity;
     }
 
-    public ProductInformationResponseModel getProductInformationResponseModel() {
-        return productInformationResponseModel;
+    public ProductInformationResponseModel getProduct() {
+        return product;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getOrderedQuantity() {
+        return orderedQuantity;
     }
 }

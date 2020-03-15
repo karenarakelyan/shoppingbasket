@@ -11,8 +11,9 @@ CREATE TABLE `user`
     UNIQUE KEY `UK_user_username` (`username` ASC)
 );
 
-# INSERT INTO `user` (`username`, `password`, `role`)
-# VALUES ('admin@gmail.com', '$2a$11$cIrY4zoYzE9GZWeZklsx1eY3EfNb8XsA.xN9wU0DKEZUwyvXikDvW', 'ADMIN');
+INSERT INTO `user` (`username`, `password`, `name`, `surname`, `birthday`, `role`)
+VALUES ('admin@gmail.com', '$2a$11$cIrY4zoYzE9GZWeZklsx1eY3EfNb8XsA.xN9wU0DKEZUwyvXikDvW', 'ADMIN', 'ADMIN',
+        '2020-01-01 01:00:00', 'ADMIN');
 
 CREATE TABLE `token`
 (

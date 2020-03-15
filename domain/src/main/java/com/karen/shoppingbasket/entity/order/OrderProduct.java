@@ -4,6 +4,7 @@ import com.karen.shoppingbasket.entity.ActionTracesAwareBaseEntity;
 import com.karen.shoppingbasket.entity.product.Product;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author Karen Arakelyan
@@ -20,6 +21,7 @@ public class OrderProduct extends ActionTracesAwareBaseEntity {
     public OrderProduct(final Product product, final Integer quantity) {
         this.product = product;
         this.quantity = quantity;
+        this.setCreatedOn(LocalDateTime.now());
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

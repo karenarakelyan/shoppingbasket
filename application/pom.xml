@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>application-services</module>
-        <module>application-event-listeners</module>
     </modules>
 
 

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Karen Arakelyan
@@ -36,11 +37,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
+
+    @Override
     public Long create(final ProductDto productDto) {
         assertDto(productDto);
         final Product product = new Product(productDto.getName(), productDto.getDescription(), productDto.getType(), productDto.getPrice());
         final Product savedProduct = productRepository.save(product);
-        applicationEventPublisher.publishEvent(new ProductCreatedEvent(this, savedProduct.getId(), 10));
+        createOrResetStockForProduct(savedProduct.getId(), productDto.getStockQuantity() == null ? 0 : productDto.getStockQuantity());
         return savedProduct.getId();
     }
 
@@ -52,6 +58,9 @@ public class ProductServiceImpl implements ProductService {
         setProductProperties(productDto, product);
         product.setUpdatedOn(LocalDateTime.now());
         productRepository.save(product);
+        if (productDto.getStockQuantity() != null) {
+            createOrResetStockForProduct(id, productDto.getStockQuantity());
+        }
         return product;
     }
 
@@ -68,6 +77,10 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(productDto.getDescription());
         product.setType(productDto.getType());
         product.setPrice(productDto.getPrice());
+    }
+
+    private void createOrResetStockForProduct(final Long productId, final int quantity) {
+        applicationEventPublisher.publishEvent(new ProductCreatedEvent(this, productId, quantity));
     }
 
     private void assertDto(final ProductDto productDto) {

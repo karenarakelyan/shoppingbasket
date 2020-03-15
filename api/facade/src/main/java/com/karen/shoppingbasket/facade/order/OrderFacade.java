@@ -14,11 +14,9 @@ public interface OrderFacade {
 
     Long createOrder(CreateOrderModel createOrderModel, Long userId);
 
-    List<OrderResponseModel> getUserOrders(Long userId);
+    List<OrderResponseModel> getAllOrders(final Long userId);
 
-    List<OrderResponseModel> getAllOrders();
-
-    OrderResponseModel getOrder(Long orderId);
+    OrderResponseModel getOrder(Long orderId, final Long userId);
 
     void changeOrderStatus(Long orderId, OrderStatus orderStatus);
 

@@ -2,6 +2,7 @@ package com.karen.shoppingbasket.services.impl;
 
 import com.karen.shoppingbasket.dto.product.ProductDto;
 import com.karen.shoppingbasket.entity.product.Product;
+import com.karen.shoppingbasket.event.ProductCreatedEvent;
 import com.karen.shoppingbasket.repository.ProductRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.context.ApplicationEventPublisher;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
@@ -29,6 +31,9 @@ public class ProductServiceImplTest {
 
     @Mock
     private ProductRepository productRepository;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Captor
     private ArgumentCaptor<Product> productArgumentCaptor;
@@ -64,7 +69,8 @@ public class ProductServiceImplTest {
         final Long result = productService.create(productDto);
         //Verify
         verify(productRepository).save(productArgumentCaptor.capture());
-        verifyNoMoreInteractions(productRepository);
+        verify(applicationEventPublisher).publishEvent(isA(ProductCreatedEvent.class));
+        verifyNoMoreInteractions(productRepository, applicationEventPublisher);
         //Assert
         assertEquals(id, result);
         final Product capturedProduct = productArgumentCaptor.getValue();
