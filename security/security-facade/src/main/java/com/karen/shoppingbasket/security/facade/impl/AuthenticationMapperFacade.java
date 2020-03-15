@@ -1,9 +1,8 @@
 package com.karen.shoppingbasket.security.facade.impl;
 
-import com.karen.shoppingbasket.dto.authentication.SuccessfullyAuthenticatedDto;
-import com.karen.shoppingbasket.facade.user.impl.UserMapperFacade;
 import com.karen.shoppingbasket.restmodels.authentication.AuthenticationResponseModel;
 import com.karen.shoppingbasket.restmodels.user.UserResponseModel;
+import com.karen.shoppingbasket.security.dto.SuccessfullyAuthenticatedDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

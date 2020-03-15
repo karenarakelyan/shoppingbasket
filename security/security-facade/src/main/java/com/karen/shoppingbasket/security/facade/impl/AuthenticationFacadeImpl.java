@@ -1,9 +1,9 @@
 package com.karen.shoppingbasket.security.facade.impl;
 
-import com.karen.shoppingbasket.dto.authentication.SuccessfullyAuthenticatedDto;
 import com.karen.shoppingbasket.restmodels.authentication.AuthenticationRequestModel;
 import com.karen.shoppingbasket.restmodels.authentication.AuthenticationResponseModel;
 import com.karen.shoppingbasket.restmodels.authentication.TokenAuthenticationRequestModel;
+import com.karen.shoppingbasket.security.dto.SuccessfullyAuthenticatedDto;
 import com.karen.shoppingbasket.security.facade.AuthenticationFacade;
 import com.karen.shoppingbasket.security.services.authentication.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;

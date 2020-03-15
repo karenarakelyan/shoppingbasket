@@ -1,5 +1,6 @@
 package com.karen.shoppingbasket.services;
 
+import com.karen.shoppingbasket.dto.user.UserDto;
 import com.karen.shoppingbasket.entity.user.User;
 
 /**
@@ -7,6 +8,8 @@ import com.karen.shoppingbasket.entity.user.User;
  */
 
 public interface UserService {
+
+    Long create(UserDto userDto);
 
     User findById(Long id);
 

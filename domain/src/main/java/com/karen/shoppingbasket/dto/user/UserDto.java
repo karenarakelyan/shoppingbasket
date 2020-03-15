@@ -1,36 +1,26 @@
-package com.karen.shoppingbasket.entity.user;
+package com.karen.shoppingbasket.dto.user;
 
-import com.karen.shoppingbasket.entity.BaseEntity;
+import com.karen.shoppingbasket.entity.user.Role;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
  * @author Karen Arakelyan
  */
-@Entity
-@Table(name = "user")
-public class User extends BaseEntity {
 
-    @Column(name = "username", unique = true, nullable = false)
+public class UserDto {
+
     private String username;
 
-    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "surname", nullable = false)
     private String surname;
 
-    @Column(name = "birthday", nullable = false)
     private LocalDateTime birthday;
 
-    @Column(name = "role", nullable = false)
-    @Enumerated(EnumType.STRING)
     private Role role;
-
 
     public String getUsername() {
         return username;
@@ -79,4 +69,5 @@ public class User extends BaseEntity {
     public void setRole(final Role role) {
         this.role = role;
     }
+
 }

@@ -46,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 new NegatedRequestMatcher(
                         new AndRequestMatcher(
                                 new AntPathRequestMatcher("/authentication/login"),
-                                new AntPathRequestMatcher("/authentication/login-token")
+                                new AntPathRequestMatcher("/authentication/login-token"),
+                                new AntPathRequestMatcher("/user")
                         )
                 )
         );

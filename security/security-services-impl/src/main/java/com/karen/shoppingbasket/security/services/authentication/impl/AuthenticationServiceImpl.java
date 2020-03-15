@@ -1,10 +1,10 @@
 package com.karen.shoppingbasket.security.services.authentication.impl;
 
-import com.karen.shoppingbasket.dto.authentication.SuccessfullyAuthenticatedDto;
 import com.karen.shoppingbasket.entity.token.Token;
 import com.karen.shoppingbasket.entity.token.TokenType;
 import com.karen.shoppingbasket.entity.user.User;
 import com.karen.shoppingbasket.security.core.PasswordHelper;
+import com.karen.shoppingbasket.security.dto.SuccessfullyAuthenticatedDto;
 import com.karen.shoppingbasket.security.exception.InvalidCredentialsException;
 import com.karen.shoppingbasket.security.services.authentication.AuthenticationService;
 import com.karen.shoppingbasket.services.TokenService;

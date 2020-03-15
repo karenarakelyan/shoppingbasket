@@ -1,7 +1,6 @@
 package com.karen.shoppingbasket.security.services.authentication;
 
-
-import com.karen.shoppingbasket.dto.authentication.SuccessfullyAuthenticatedDto;
+import com.karen.shoppingbasket.security.dto.SuccessfullyAuthenticatedDto;
 
 /**
  * @author Karen Arakelyan

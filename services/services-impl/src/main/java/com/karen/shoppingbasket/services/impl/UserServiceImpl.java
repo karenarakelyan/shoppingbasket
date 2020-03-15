@@ -1,5 +1,6 @@
 package com.karen.shoppingbasket.services.impl;
 
+import com.karen.shoppingbasket.dto.user.UserDto;
 import com.karen.shoppingbasket.entity.user.User;
 import com.karen.shoppingbasket.repository.UserRepository;
 import com.karen.shoppingbasket.services.UserService;
@@ -24,6 +25,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Long create(final UserDto userDto) {
+        assertUserDto(userDto);
+        final User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setPassword(userDto.getPassword());
+        user.setName(userDto.getName());
+        user.setSurname(userDto.getSurname());
+        user.setBirthday(userDto.getBirthday());
+        user.setRole(userDto.getRole());
+        final User savedUser = userRepository.save(user);
+        return savedUser.getId();
+    }
+
+    @Override
     public User findById(final Long id) {
         Assert.notNull(id, "User id must not be null");
         return userRepository.getOne(id);
@@ -38,4 +53,15 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    private void assertUserDto(final UserDto userDto) {
+        Assert.notNull(userDto, "User dto must not be null");
+        Assert.hasText(userDto.getUsername(), "Username must not be null");
+        Assert.hasText(userDto.getPassword(), "Password must not be null");
+        Assert.hasText(userDto.getName(), "Name must not be null");
+        Assert.hasText(userDto.getSurname(), "Surname must not be null");
+        Assert.notNull(userDto.getBirthday(), "Birthday must not be null");
+        Assert.notNull(userDto.getRole(), "Role must not be null");
+    }
+
 }

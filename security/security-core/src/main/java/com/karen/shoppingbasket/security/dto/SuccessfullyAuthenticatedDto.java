@@ -1,4 +1,4 @@
-package com.karen.shoppingbasket.dto.authentication;
+package com.karen.shoppingbasket.security.dto;
 
 import com.karen.shoppingbasket.entity.user.User;
 
