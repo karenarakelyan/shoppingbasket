@@ -60,7 +60,7 @@ public class OrderServiceImplTest {
     private ArgumentCaptor<Order> orderArgumentCaptor;
 
     @Test
-    public void testThatOrderIsBeingCreatedSuccessully() {
+    public void testThatOrderIsBeingCreatedSuccessfully() {
         final OrderDto orderDto = createOrderDto();
         final Long userId = 123L;
         final User user = new User();
