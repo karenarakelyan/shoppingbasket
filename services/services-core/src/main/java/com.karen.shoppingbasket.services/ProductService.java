@@ -13,7 +13,11 @@ public interface ProductService {
 
     Product findOne(Long id);
 
-    List<Product> findAll();
+    List<Product> findAll(Boolean sortByPrice);
+
+    Product findByName(String name);
+
+    List<Product> findByType(String type);
 
     Long create(ProductDto productDto);
 

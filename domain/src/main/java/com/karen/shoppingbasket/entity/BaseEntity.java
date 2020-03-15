@@ -1,5 +1,7 @@
 package com.karen.shoppingbasket.entity;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,9 +27,8 @@ public class BaseEntity {
 
     @Override
     public String toString() {
-        return new org.apache.commons.lang3.builder.ToStringBuilder(this)
+        return new ToStringBuilder(this)
                 .append("id", id)
                 .toString();
     }
-
 }

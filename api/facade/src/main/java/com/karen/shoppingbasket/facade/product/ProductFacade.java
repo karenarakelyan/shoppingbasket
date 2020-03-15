@@ -18,8 +18,12 @@ public interface ProductFacade {
 
     ProductInformationResponseModel getById(Long id);
 
-    List<ProductInformationResponseModel> findAll();
+    List<ProductInformationResponseModel> findAll(final Boolean sortByPrice);
+
+    ProductInformationResponseModel findByName(String name);
 
     void delete(Long id);
+
+    List<ProductInformationResponseModel> findByType(String type);
 
 }

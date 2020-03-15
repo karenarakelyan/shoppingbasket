@@ -8,6 +8,7 @@ import com.karen.shoppingbasket.services.ProductService;
 import com.karen.shoppingbasket.services.StockMutationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**
@@ -29,6 +30,7 @@ public class StockMutationServiceImpl implements StockMutationService {
     }
 
     @Override
+    @Transactional
     public Long createStockMutation(final Long productId, final MutationType type, final Integer count) {
         Assert.notNull(productId, "Product id must not be null");
         Assert.notNull(type, "Mutation type must not be null");

@@ -1,6 +1,8 @@
 package com.karen.shoppingbasket.entity.user;
 
 import com.karen.shoppingbasket.entity.BaseEntity;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,10 +11,12 @@ import java.time.LocalDateTime;
  * @author Karen Arakelyan
  */
 @Entity
-@Table(name = "user")
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_user_username", columnNames = {"username"})
+})
 public class User extends BaseEntity {
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "username", nullable = false)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -78,5 +82,35 @@ public class User extends BaseEntity {
 
     public void setRole(final Role role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final User user = (User) o;
+
+        return new EqualsBuilder()
+                .append(username, user.username)
+                .append(password, user.password)
+                .append(name, user.name)
+                .append(surname, user.surname)
+                .append(birthday, user.birthday)
+                .append(role, user.role)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(username)
+                .append(password)
+                .append(name)
+                .append(surname)
+                .append(birthday)
+                .append(role)
+                .toHashCode();
     }
 }

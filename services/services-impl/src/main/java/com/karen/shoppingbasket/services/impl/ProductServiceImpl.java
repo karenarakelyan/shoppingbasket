@@ -5,11 +5,14 @@ import com.karen.shoppingbasket.entity.product.Product;
 import com.karen.shoppingbasket.event.ProductCreatedEvent;
 import com.karen.shoppingbasket.repository.ProductRepository;
 import com.karen.shoppingbasket.services.ProductService;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,11 +40,29 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAll() {
+    public List<Product> findAll(final Boolean sortByPrice) {
+        if (BooleanUtils.isTrue(sortByPrice)) {
+            return productRepository.findAllByOrderByPriceDesc();
+        }
         return productRepository.findAll();
     }
 
     @Override
+    public Product findByName(final String name) {
+        final Product product = productRepository.getByName(name);
+        if (product == null) {
+            throw new EntityNotFoundException(String.format("Not found product by name '%s", name));
+        }
+        return product;
+    }
+
+    @Override
+    public List<Product> findByType(final String type) {
+        return productRepository.findAllByType(type);
+    }
+
+    @Override
+    @Transactional
     public Long create(final ProductDto productDto) {
         assertDto(productDto);
         final Product product = new Product(productDto.getName(), productDto.getDescription(), productDto.getType(), productDto.getPrice());
@@ -51,6 +72,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public Product update(final Long id, final ProductDto productDto) {
         Assert.notNull(id, "Id must not be null");
         assertDto(productDto);
@@ -65,6 +87,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void delete(final Long id) {
         Assert.notNull(id, "Id must not be null");
         final Product product = productRepository.getOne(id);

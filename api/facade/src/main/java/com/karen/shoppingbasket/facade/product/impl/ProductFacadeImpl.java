@@ -50,9 +50,15 @@ public class ProductFacadeImpl implements ProductFacade {
     }
 
     @Override
-    public List<ProductInformationResponseModel> findAll() {
-        final List<Product> products = productService.findAll();
+    public List<ProductInformationResponseModel> findAll(final Boolean sortByPrice) {
+        final List<Product> products = productService.findAll(sortByPrice);
         return products.stream().map(productMapperFacade::generateResponseModel).collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductInformationResponseModel findByName(final String name) {
+        final Product product = productService.findByName(name);
+        return productMapperFacade.generateResponseModel(product);
     }
 
     @Override
@@ -60,5 +66,9 @@ public class ProductFacadeImpl implements ProductFacade {
         productService.delete(id);
     }
 
-
+    @Override
+    public List<ProductInformationResponseModel> findByType(final String type) {
+        final List<Product> products = productService.findByType(type);
+        return products.stream().map(productMapperFacade::generateResponseModel).collect(Collectors.toList());
+    }
 }

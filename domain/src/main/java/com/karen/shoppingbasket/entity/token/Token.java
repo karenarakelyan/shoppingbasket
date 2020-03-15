@@ -1,7 +1,9 @@
 package com.karen.shoppingbasket.entity.token;
 
-import com.karen.shoppingbasket.SoftDeletableBaseEntity;
+import com.karen.shoppingbasket.entity.SoftDeletableBaseEntity;
 import com.karen.shoppingbasket.entity.user.User;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,10 +25,6 @@ public class Token extends SoftDeletableBaseEntity {
     @ManyToOne
     @JoinColumn(name = "userid", foreignKey = @ForeignKey(name = "FK_token_user"))
     private User owner;
-
-    public Token() {
-        super();
-    }
 
     public String getValue() {
         return value;
@@ -58,5 +56,31 @@ public class Token extends SoftDeletableBaseEntity {
 
     public void setOwner(final User owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final Token token = (Token) o;
+
+        return new EqualsBuilder()
+                .append(value, token.value)
+                .append(tokenType, token.tokenType)
+                .append(expirationDate, token.expirationDate)
+                .append(owner, token.owner)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(value)
+                .append(tokenType)
+                .append(expirationDate)
+                .append(owner)
+                .toHashCode();
     }
 }

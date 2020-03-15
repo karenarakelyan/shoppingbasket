@@ -45,8 +45,20 @@ public class ProductResource {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     @RequestMapping(name = "Get All Products", method = RequestMethod.GET)
-    public List<ProductInformationResponseModel> getAll() {
-        return productFacade.findAll();
+    public List<ProductInformationResponseModel> getAll(@RequestParam("sortByPrice") final Boolean sortByPrice) {
+        return productFacade.findAll(sortByPrice);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    @RequestMapping(name = "Get All Products", method = RequestMethod.GET, path = "/name/{name}")
+    public ProductInformationResponseModel getByName(@PathVariable("name") final String name) {
+        return productFacade.findByName(name);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    @RequestMapping(name = "Get All Products", method = RequestMethod.GET, path = "/type/{type}")
+    public List<ProductInformationResponseModel> getByType(@PathVariable("type") final String type) {
+        return productFacade.findByType(type);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

@@ -14,7 +14,6 @@
     <modules>
         <module>services-impl</module>
         <module>services-core</module>
-        <module>services-integrationtest</module>
     </modules>
 
     <dependencies>

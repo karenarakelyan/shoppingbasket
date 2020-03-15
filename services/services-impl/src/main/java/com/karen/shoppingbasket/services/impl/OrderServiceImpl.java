@@ -15,6 +15,7 @@ import com.karen.shoppingbasket.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -55,6 +56,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Long createOrder(final OrderDto orderDto, final Long userId) {
         Assert.notNull(orderDto, "Order Dto must not be null");
         Assert.notEmpty(orderDto.getProductsWithQuantities(), "Product ids must not be null");
@@ -72,6 +74,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order changeOrderStatus(final Long id, final Status status) {
         Assert.notNull(id, "Order id must not be null");
         Assert.notNull(status, "Order status must not be null");
@@ -88,6 +91,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getCustomerOrders(final Long customerId) {
+        Assert.notNull(customerId, "Customer id must not be null");
         return orderRepository.findAllByUserId(customerId);
     }
 

@@ -10,6 +10,7 @@ import com.karen.shoppingbasket.services.exception.InvalidTokenRuntimeException;
 import com.karen.shoppingbasket.services.exception.TokenNotFoundRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityNotFoundException;
@@ -51,6 +52,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
+    @Transactional
     public Token createToken(final Long userId, final TokenType tokenType) {
         Assert.notNull(userId, "User id must not be null");
         final List<Token> tokens = tokenRepository.findAll();
@@ -70,6 +72,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
+    @Transactional
     public Token removeToken(final String tokenValue) {
         Assert.notNull(tokenValue, "Token must not be null");
         final Token token = tokenRepository.findByValue(tokenValue);

@@ -6,6 +6,7 @@ import com.karen.shoppingbasket.repository.UserRepository;
 import com.karen.shoppingbasket.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityNotFoundException;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Long create(final UserDto userDto) {
         assertUserDto(userDto);
         final User user = new User();

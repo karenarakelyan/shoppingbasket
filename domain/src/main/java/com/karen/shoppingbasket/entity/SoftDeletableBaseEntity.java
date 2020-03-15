@@ -1,6 +1,4 @@
-package com.karen.shoppingbasket;
-
-import com.karen.shoppingbasket.entity.ActionTracesAwareBaseEntity;
+package com.karen.shoppingbasket.entity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

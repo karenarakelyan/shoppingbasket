@@ -1,7 +1,6 @@
 package com.karen.shoppingbasket.entity.product;
 
-import com.karen.shoppingbasket.SoftDeletableBaseEntity;
-import com.karen.shoppingbasket.entity.ActionTracesAwareBaseEntity;
+import com.karen.shoppingbasket.entity.SoftDeletableBaseEntity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -21,6 +20,10 @@ import java.time.LocalDateTime;
 })
 public class Product extends SoftDeletableBaseEntity {
 
+    private Product() {
+
+    }
+
     public Product(final String name, final String description, final String type, final BigDecimal price) {
         this.name = name;
         this.description = description;
@@ -29,10 +32,7 @@ public class Product extends SoftDeletableBaseEntity {
         this.setCreatedOn(LocalDateTime.now());
     }
 
-    public Product() {
-    }
-
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
