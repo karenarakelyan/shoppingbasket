@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <mysql-connector-version>8.0.19</mysql-connector-version>
+        <mysql-connector-version>8.0.28</mysql-connector-version>
     </properties>
 
     <artifactId>domain</artifactId>
